@@ -1,7 +1,9 @@
 import fs from 'node:fs';
 import { cwd } from 'node:process';
-import { resolve, path } from 'node:path';
+import * as path from 'path';
+import { resolve } from 'node:path';
 import parseFile from './parser.js';
+import _ from 'lodash';
 
 const getFilePath = (filePath) => resolve(cwd(), filePath);
 
@@ -17,6 +19,25 @@ const gendiff = (filepath1, filepath2) => {
 
   const obj1 = parseFile(data1, getFormat(filepath1));
   const obj2 = parseFile(data2, getFormat(filepath2));
+
+  const keys = _.union(_.keys(obj1), _.keys(obj2)).sort();
+
+  let diff = '';
+
+  keys.forEach((key) => {
+    if (!_.has(obj1, key)) {
+      diff += `+ ${key}: ${obj2[key]}\n`;
+    } else if (!_.has(obj2, key)) {
+      diff += `- ${key}: ${obj1[key]}\n`;
+    } else if (obj1[key] !== obj2[key]) {
+      diff += `- ${key}: ${obj1[key]}\n`;
+      diff += `+ ${key}: ${obj2[key]}\n`;
+    } else {
+      diff += `  ${key}: ${obj1[key]}\n`;
+    }
+  });
+
+  return diff;
 
 };
 
