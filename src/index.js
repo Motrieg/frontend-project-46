@@ -1,15 +1,13 @@
 import fs from 'node:fs';
-import { cwd } from 'node:process';
 import * as path from 'path';
-import { resolve } from 'node:path';
 import parseFile from './parser.js';
 import _ from 'lodash';
 
-const getFilePath = (filePath) => resolve(cwd(), filePath);
+//const getFilePath = (filePath) => resolve(cwd(), filePath);
 
 const getFormat = (filePath) => path.extname(filePath).slice(1);
 
-const readFile = (filePath) => fs.readFileSync(filePath, 'utf-8');
+//const readFile = (filePath) => fs.readFileSync(filePath, 'utf-8');
 
 const getData = (filePath) => fs.readFileSync(path.resolve(process.cwd(), filePath), 'utf-8');
 
